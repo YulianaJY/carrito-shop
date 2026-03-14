@@ -20,9 +20,11 @@
 
   <!-- Guard de sesión: si no hay login activo, regresa al login -->
   <script>
-    if (localStorage.getItem('login') !== 'true') {
-      window.location.href = 'login.html';
-    }
+    (function() {
+      if (localStorage.getItem('login') !== 'true') {
+        window.location.replace('login.html');
+      }
+    })();
   </script>
 </head>
 
