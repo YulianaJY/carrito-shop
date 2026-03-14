@@ -3,22 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carrito de compras</title>
+  <title>Donas Yuls</title>
   <link rel="shortcut icon" href="assets/imgs/favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-  />
-
-  <link rel="stylesheet" href="assets/css/home.css" />
-
-  <!-- Guard de sesión: si no hay login activo, regresa al login -->
+  <!-- Guard de sesión -->
   <script>
     (function() {
       if (localStorage.getItem('login') !== 'true') {
@@ -26,82 +19,710 @@
       }
     })();
   </script>
+
+  <style>
+    :root {
+      --cream:     #FFF8F0;
+      --caramel:   #E8956D;
+      --chocolate: #3D1A0E;
+      --mocha:     #7B3F2A;
+      --glaze:     #F4A97F;
+      --soft-bg:   #FDF5ED;
+      --border:    #EDD9C8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--soft-bg);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .top-nav {
+      background: var(--chocolate);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(61,26,14,0.3);
+    }
+
+    .nav-brand {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: var(--cream);
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .brand-emoji {
+      font-size: 1.6rem;
+      animation: donutBounce 3s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes donutBounce {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-5px) rotate(10deg); }
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .welcome-pill {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 50px;
+      padding: 7px 16px;
+      color: var(--cream);
+      font-size: 0.82rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .welcome-pill strong {
+      color: var(--glaze);
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .btn-salir {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.65);
+      padding: 7px 12px;
+      font-size: 0.8rem;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-salir:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .btn-cart-nav {
+      position: relative;
+      background: var(--caramel);
+      border: none;
+      border-radius: 12px;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      color: white;
+      font-size: 1.15rem;
+    }
+
+    .btn-cart-nav:hover {
+      background: var(--glaze);
+      transform: scale(1.08);
+    }
+
+    .btn-cart-nav .badge-count {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: #e63946;
+      color: white;
+      font-size: 0.62rem;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--chocolate);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--chocolate) 0%, #5a2410 100%);
+      padding: 56px 2rem 52px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, var(--caramel), transparent 65%);
+      top: -180px; right: -100px;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, var(--glaze), transparent 65%);
+      bottom: -120px; left: -60px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--cream);
+      letter-spacing: -0.03em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-sub {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--glaze);
+      font-size: 1.05rem;
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CATALOG ── */
+    .catalog-wrap {
+      padding: 52px 2rem 80px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .catalog-heading {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: var(--chocolate);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .catalog-heading::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, var(--border), transparent);
+      border-radius: 2px;
+    }
+
+    /* ── PRODUCT CARDS ── */
+    .dona-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      animation: cardIn 0.5s ease both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .dona-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 20px 44px rgba(61,26,14,0.13);
+    }
+
+    .dona-img-wrap {
+      height: 190px;
+      overflow: hidden;
+      background: var(--soft-bg);
+      flex-shrink: 0;
+    }
+
+    .dona-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+      -webkit-mask-image: linear-gradient(black 72%, transparent);
+      mask-image: linear-gradient(black 72%, transparent);
+    }
+
+    .dona-card:hover .dona-img-wrap img {
+      transform: scale(1.09);
+    }
+
+    .dona-card .card-body {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .dona-card .card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--chocolate);
+      margin-bottom: 3px;
+    }
+
+    .dona-card .card-cat {
+      font-size: 0.72rem;
+      color: var(--mocha);
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .price {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--chocolate);
+    }
+
+    .btn-add {
+      background: var(--chocolate);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-add:hover {
+      background: var(--caramel);
+      transform: scale(1.06);
+    }
+
+    /* ── OFFCANVAS CARRITO ── */
+    .offcanvas {
+      width: 380px !important;
+      border-left: 1px solid var(--border) !important;
+      transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.45s ease !important;
+    }
+
+    .offcanvas:not(.show) {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    .offcanvas.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .offcanvas-header {
+      background: var(--chocolate) !important;
+      padding: 18px 22px !important;
+    }
+
+    .offcanvas-title {
+      font-family: 'Fraunces', serif !important;
+      font-weight: 700 !important;
+      font-size: 1.05rem !important;
+      color: var(--cream) !important;
+    }
+
+    .offcanvas-header .btn-close {
+      filter: invert(1) !important;
+      opacity: 0.6 !important;
+    }
+
+    .offcanvas-body {
+      background: var(--soft-bg) !important;
+      padding: 16px !important;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 52px 20px;
+      color: #c0a090;
+    }
+
+    .cart-empty .empty-icon {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 10px;
+      opacity: 0.35;
+    }
+
+    .cart-empty p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* Cart items */
+    .cart-item {
+      background: white;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 11px;
+      align-items: center;
+      border: 1px solid var(--border);
+      animation: itemSlide 0.3s ease both;
+    }
+
+    @keyframes itemSlide {
+      from { opacity: 0; transform: translateX(12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .cart-item img {
+      width: 54px; height: 54px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; min-width: 0; }
+
+    .cart-item-name {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.87rem;
+      color: var(--chocolate);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cart-item-meta {
+      font-size: 0.72rem;
+      color: var(--mocha);
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+
+    .cart-item-price {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--chocolate);
+      margin-top: 5px;
+    }
+
+    .btn-del {
+      background: #fff2f0;
+      border: 1px solid #ffd6cc;
+      color: #e63946;
+      border-radius: 8px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-size: 0.78rem;
+      transition: all 0.2s;
+    }
+
+    .btn-del:hover {
+      background: #e63946;
+      color: white;
+      border-color: #e63946;
+    }
+
+    /* Cart footer */
+    .cart-footer {
+      padding: 16px 20px 22px;
+      background: white;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .total-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--mocha);
+    }
+
+    #subtotal {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 1.7rem;
+      color: var(--chocolate);
+    }
+
+    .btn-whatsapp {
+      width: 100%;
+      padding: 13px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+
+    .btn-whatsapp:hover:not(:disabled) {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37,211,102,0.3);
+    }
+
+    .btn-whatsapp:disabled {
+      background: #d0c8c0;
+      cursor: not-allowed;
+    }
+
+    /* balanceo */
+    .balanceo {
+      animation: swing 0.6s ease forwards;
+      display: inline-block;
+    }
+    @keyframes swing {
+      0%   { transform: rotate(0); }
+      25%  { transform: rotate(15deg); }
+      50%  { transform: rotate(-10deg); }
+      75%  { transform: rotate(5deg); }
+      100% { transform: rotate(0); }
+    }
+
+    /* site footer */
+    .site-footer {
+      background: var(--chocolate);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+    }
+
+    /* card stagger */
+    #donas-container > div:nth-child(1)  .dona-card { animation-delay:.05s }
+    #donas-container > div:nth-child(2)  .dona-card { animation-delay:.10s }
+    #donas-container > div:nth-child(3)  .dona-card { animation-delay:.15s }
+    #donas-container > div:nth-child(4)  .dona-card { animation-delay:.20s }
+    #donas-container > div:nth-child(5)  .dona-card { animation-delay:.25s }
+    #donas-container > div:nth-child(6)  .dona-card { animation-delay:.30s }
+    #donas-container > div:nth-child(7)  .dona-card { animation-delay:.35s }
+    #donas-container > div:nth-child(8)  .dona-card { animation-delay:.40s }
+  </style>
 </head>
 
 <body>
 
-  <!-- Botón del carrito -->
-  <div class="position-relative">
-    <a
-      href="#"
-      class="btn btn_shopping cart-badge position-fixed top-0 end-0 me-4 mt-3 swing-on-hover border bg-white"
-    >
-      <i class="bi bi-bag-heart"></i>
-      <span
-        id="contador-carrito"
-        class="position-absolute top-1 start-100 translate-middle badge rounded-pill bg-danger"
-      >
-        0
-      </span>
+  <!-- NAVBAR -->
+  <nav class="top-nav">
+    <a class="nav-brand" href="#">
+      <span class="brand-emoji">🍩</span> Donas Yuls
     </a>
-  </div>
-
-  <!-- Botón cerrar sesión -->
-  <button
-    onclick="cerrarSesion()"
-    class="btn btn-sm btn-outline-dark position-fixed top-0 start-0 ms-4 mt-3"
-    style="z-index:999;"
-  >
-    <i class="bi bi-box-arrow-left"></i> Salir
-  </button>
-
-  <!-- Contenedor principal -->
-  <div class="container my-5">
-    <h1 class="text-center fw-bold">Bienvenidos a Tu Tienda de Donas Yuls 🍩</h1>
-    <div id="donas-container" class="row g-4 mt-4"></div>
-  </div>
-
-  <!-- Offcanvas del carrito -->
-  <div
-    class="offcanvas offcanvas-end"
-    tabindex="-1"
-    id="offcanvasRight"
-    aria-labelledby="offcanvasRightLabel"
-  >
-    <div class="offcanvas-header border-bottom">
-      <h4 class="offcanvas-title text-center">Carrito de compras</h4>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="offcanvas"
-      ></button>
+    <div class="nav-right">
+      <div class="welcome-pill">
+        👋 Hola, <strong id="nombre-usuario">Usuario</strong>
+      </div>
+      <button class="btn-salir" onclick="cerrarSesion()">
+        <i class="bi bi-box-arrow-right"></i> Salir
+      </button>
+      <button class="btn-cart-nav" id="btn-abrir-carrito">
+        <i class="bi bi-bag-heart"></i>
+        <span class="badge-count" id="contador-carrito">0</span>
+      </button>
     </div>
+  </nav>
 
-    <div class="offcanvas-body border-bottom"></div>
+  <!-- HERO -->
+  <div class="hero">
+    <h1 class="hero-title">Bienvenidos a Donas Yuls 🍩</h1>
+    <p class="hero-sub">donas artesanales hechas con amor</p>
+  </div>
 
-    <div class="offcanvas-footer mt-4">
-      <h5 class="justify-content-between mb-2">
-        <span class="fw-bold px-3">SUBTOTAL:</span>
-        <span id="subtotal" class="fw-bold float-end px-2 fs-2">$0.00</span>
-      </h5>
+  <!-- CATALOG -->
+  <div class="catalog-wrap">
+    <div class="catalog-heading">Nuestras Donas</div>
+    <div id="donas-container" class="row g-4"></div>
+  </div>
+
+  <!-- OFFCANVAS -->
+  <div class="offcanvas offcanvas-end d-flex flex-column" tabindex="-1" id="offcanvasRight">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">🛍️ Tu pedido</h5>
+      <button type="button" class="btn-close" id="btn-cerrar-carrito"></button>
+    </div>
+    <div class="offcanvas-body"></div>
+    <div class="cart-footer offcanvas-footer">
+      <div class="total-row">
+        <span class="total-label">Total del pedido</span>
+        <span id="subtotal">$0.00</span>
+      </div>
+      <button class="btn-whatsapp" onclick="generarPedidoWhatsApp()" disabled>
+        <i class="bi bi-whatsapp"></i> Enviar por WhatsApp
+      </button>
     </div>
   </div>
 
-  <!-- Footer simple -->
-  <footer class="bg-dark text-white text-center py-3 mt-5">
-    <p class="mb-0">Tienda de Donas Yuls</p>
+  <footer class="site-footer">
+    © 2025 Tienda de Donas Yuls — todos los derechos reservados
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/obtener_productos.js"></script>
-  <script src="assets/js/app.js"></script>
 
   <script>
+    // ── Nombre de usuario en bienvenida ──
+    (function() {
+      const activo = localStorage.getItem('usuarioActivo');
+      if (activo) {
+        document.getElementById('nombre-usuario').textContent = activo;
+      } else {
+        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+        if (usuarios.length > 0) {
+          const u = usuarios[usuarios.length - 1];
+          document.getElementById('nombre-usuario').textContent = u.user || 'Usuario';
+        }
+      }
+    })();
+
     function cerrarSesion() {
       localStorage.removeItem('login');
-      window.location.href = 'login.html';
+      localStorage.removeItem('usuarioActivo');
+      window.location.replace('login.html');
+    }
+
+    // ── Carrito toggle ──
+    const offcanvasEl   = document.getElementById('offcanvasRight');
+    const btnAbrir      = document.getElementById('btn-abrir-carrito');
+    const btnCerrar     = document.getElementById('btn-cerrar-carrito');
+
+    btnAbrir.addEventListener('click', () => {
+      offcanvasEl.classList.toggle('show');
+      btnAbrir.querySelector('i').classList.add('balanceo');
+      setTimeout(() => btnAbrir.querySelector('i').classList.remove('balanceo'), 600);
+    });
+
+    btnCerrar.addEventListener('click', () => offcanvasEl.classList.remove('show'));
+  </script>
+
+  <!-- Patch obtener_productos para inyectar card moderno -->
+  <script>
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = async function(...args) {
+      const res = await _origFetch(...args);
+      const url = args[0] ? args[0].toString() : '';
+      if (url.includes('data_donas')) {
+        const clone = res.clone();
+        clone.json().then(donas => {
+          const container = document.getElementById('donas-container');
+          if (!container) return;
+          container.innerHTML = donas.map(({ name, price, image, category }, i) => `
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <div class="dona-card card h-100 border-0 custom-card" style="animation-delay:${i * 0.07}s">
+                <div class="dona-img-wrap">
+                  <img src="assets/img-products/${image}.jpg" alt="${name}">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">${name}</h5>
+                  <p class="card-cat card-text"><strong>${category}</strong></p>
+                  <div class="price-row">
+                    <span class="price">$${price.toFixed(2)}</span>
+                    <button class="btn-add btn-cart">
+                      Agregar <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        });
+      }
+      return res;
+    };
+  </script>
+
+  <script src="assets/js/obtener_productos.js"></script>
+
+  <!-- Override renderizarCarrito con diseño nuevo -->
+  <script>
+    function renderizarCarrito() {
+      const body = document.querySelector('.offcanvas-body');
+      body.innerHTML = '';
+
+      if (articulosCarrito.length === 0) {
+        body.innerHTML = `
+          <div class="cart-empty">
+            <span class="empty-icon">🛒</span>
+            <p>Tu carrito está vacío.<br>¡Agrega tus donas favoritas!</p>
+          </div>`;
+        return;
+      }
+
+      articulosCarrito.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${p.imagen}" alt="${p.nombre}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${p.nombre}</div>
+            <div class="cart-item-meta">${p.categoria} ${p.cantidad > 1 ? '· ' + p.cantidad + 'x' : ''}</div>
+            <div class="cart-item-price">$${(p.precio * p.cantidad).toFixed(2)}</div>
+          </div>
+          <button class="btn-del btn-borrar" data-id="${p.id}" title="Quitar">
+            <i class="bi bi-trash3"></i>
+          </button>
+        `;
+        body.appendChild(div);
+      });
+
+      agregarEventosBorrar();
     }
   </script>
+
+  <script src="assets/js/app.js"></script>
 
 </body>
 </html>
