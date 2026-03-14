@@ -397,10 +397,10 @@ body {
       <!-- Login -->
       <div class="form-panel active" id="panel-login">
         <div class="field">
-          <label>Correo</label>
+          <label>Usuario</label>
           <div class="input-wrap">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            <input type="email" id="loginEmail" placeholder="tu@correo.com">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <input type="text" id="loginUser" placeholder="tu usuario">
           </div>
         </div>
         <div class="field">
@@ -415,6 +415,13 @@ body {
 
       <!-- Register -->
       <div class="form-panel" id="panel-register">
+        <div class="field">
+          <label>Usuario</label>
+          <div class="input-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <input type="text" id="regUser" placeholder="tu usuario">
+          </div>
+        </div>
         <div class="field">
           <label>Correo</label>
           <div class="input-wrap">
@@ -490,14 +497,13 @@ function clearMsg() {
 
 function registrar() {
   const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
 
-  if (!email || !password) { showMsg('Completa todos los campos', 'error'); return; }
+  if (!email) { showMsg('Ingresa tu correo', 'error'); return; }
 
   let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
   if (usuarios.find(u => u.email === email)) { showMsg('Este correo ya está registrado', 'error'); return; }
 
-  usuarios.push({ email, password });
+  usuarios.push({ email });
   localStorage.setItem('usuarios', JSON.stringify(usuarios));
   showMsg('¡Cuenta creada! Ya puedes entrar 🍩', 'success');
   setTimeout(() => switchTab('login'), 1400);
@@ -505,17 +511,18 @@ function registrar() {
 
 function login() {
   const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
+
+  if (!email) { showMsg('Ingresa tu correo', 'error'); return; }
 
   let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  const usuario = usuarios.find(u => u.email === email && u.password === password);
+  const usuario = usuarios.find(u => u.email === email);
 
   if (usuario) {
     localStorage.setItem('login', 'true');
     showMsg('¡Bienvenido/a! Entrando… 🍩', 'success');
     setTimeout(() => window.location.href = 'index.html', 1000);
   } else {
-    showMsg('Correo o contraseña incorrectos', 'error');
+    showMsg('Correo no registrado', 'error');
   }
 }
 
